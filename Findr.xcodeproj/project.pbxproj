@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3757EBE714A6974D003AD04E /* FileTableDelegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = 3757EBE614A6974D003AD04E /* FileTableDelegate.rb */; };
+		3757EBEA14A6B1E9003AD04E /* file_info.rb in Resources */ = {isa = PBXBuildFile; fileRef = 3757EBE914A6B1E9003AD04E /* file_info.rb */; };
 		37E3A37F14A3E4B5003349BF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E3A37E14A3E4B5003349BF /* Cocoa.framework */; };
 		37E3A38114A3E4B5003349BF /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E3A38014A3E4B5003349BF /* MacRuby.framework */; };
 		37E3A38814A3E4B5003349BF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37E3A38614A3E4B5003349BF /* InfoPlist.strings */; };
@@ -17,12 +19,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3757EBE614A6974D003AD04E /* FileTableDelegate.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = FileTableDelegate.rb; sourceTree = "<group>"; };
+		3757EBE914A6B1E9003AD04E /* file_info.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = file_info.rb; sourceTree = "<group>"; };
 		37E3A37A14A3E4B5003349BF /* Findr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Findr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37E3A37E14A3E4B5003349BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		37E3A38014A3E4B5003349BF /* MacRuby.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MacRuby.framework; path = System/Library/Frameworks/MacRuby.framework; sourceTree = SDKROOT; };
-		37E3A38514A3E4B5003349BF /* Findr-Info.plist */ = {isa = PBXFileReference; path = "Findr-Info.plist"; sourceTree = "<group>"; };
+		37E3A38514A3E4B5003349BF /* Findr-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Findr-Info.plist"; sourceTree = "<group>"; };
 		37E3A38714A3E4B5003349BF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		37E3A38914A3E4B5003349BF /* Findr-Prefix.pch */ = {isa = PBXFileReference; path = "Findr-Prefix.pch"; sourceTree = "<group>"; };
+		37E3A38914A3E4B5003349BF /* Findr-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Findr-Prefix.pch"; sourceTree = "<group>"; };
 		37E3A38A14A3E4B5003349BF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		37E3A38E14A3E4B5003349BF /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		37E3A39114A3E4B5003349BF /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
@@ -71,10 +75,12 @@
 		37E3A38314A3E4B5003349BF /* Findr */ = {
 			isa = PBXGroup;
 			children = (
+				3757EBE914A6B1E9003AD04E /* file_info.rb */,
 				37E3A39314A3E4B5003349BF /* AppDelegate.rb */,
 				37E3A38C14A3E4B5003349BF /* Resources */,
 				37E3A39014A3E4B5003349BF /* Other Sources */,
 				37E3A38414A3E4B5003349BF /* Supporting Files */,
+				3757EBE614A6974D003AD04E /* FileTableDelegate.rb */,
 			);
 			path = Findr;
 			sourceTree = "<group>";
@@ -174,6 +180,8 @@
 				37E3A38F14A3E4B5003349BF /* MainMenu.xib in Resources */,
 				37E3A39214A3E4B5003349BF /* rb_main.rb in Resources */,
 				37E3A39414A3E4B5003349BF /* AppDelegate.rb in Resources */,
+				3757EBE714A6974D003AD04E /* FileTableDelegate.rb in Resources */,
+				3757EBEA14A6B1E9003AD04E /* file_info.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +262,7 @@
 				GCC_PREFIX_HEADER = "Findr/Findr-Prefix.pch";
 				INFOPLIST_FILE = "Findr/Findr-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -270,6 +279,7 @@
 				GCC_PREFIX_HEADER = "Findr/Findr-Prefix.pch";
 				INFOPLIST_FILE = "Findr/Findr-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -305,6 +315,7 @@
 				37E3A39914A3E4B5003349BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		37E3A39A14A3E4B5003349BF /* Build configuration list for PBXLegacyTarget "Deployment" */ = {
 			isa = XCConfigurationList;
@@ -313,6 +324,7 @@
 				37E3A39C14A3E4B5003349BF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
