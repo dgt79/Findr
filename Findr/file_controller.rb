@@ -3,28 +3,32 @@ class FileController
 	MEGA_SIZE = 1048576.0
 	KILO_SIZE = 1024.0
 
-	def get_files(path)
+	def get_files(path, show_hidden = true)
 		#NSLog "get files for path #{path}"
 		files = []
 		directories = []
 
 		Dir.foreach(path) do |file_name|
 			next if file_name == '.'
-			
+			next if !show_hidden && file_name =~ /^\.[^\.]+/         #match anything that starts with . followed by any char except .
+
 			file_info = FileInfo.new
 			abs_file_name = File.absolute_path file_name, path
 			file_ftype = File.ftype(abs_file_name)
 			case file_ftype
 				when 'link' then file_info.display_name = "#{file_name}@ -> #{File.readlink abs_file_name}"
-				when 'directory' then file_info.display_name = "[#{file_name}]"
+				when 'directory' then file_info.display_name = file_name
 				else file_info.display_name = file_name
 			end
 			file_info.name = file_name
 			file_info.size = readable_file_size(File.size(abs_file_name), 2)
-			file_info.ext = File.ftype abs_file_name
+			file_info.type = File.ftype abs_file_name
+			file_info.ext = File.extname abs_file_name
 			file_info.date = File.atime(abs_file_name).strftime("%d/%m/%Y %H:%M:%S")
 			file_info.attr = File.world_readable? abs_file_name
 			file_info.path = abs_file_name
+
+			file_info.ext = file_info.type
 
 			if file_ftype == 'link' || file_ftype == 'directory'
 				#directories << file_info

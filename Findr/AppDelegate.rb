@@ -1,84 +1,93 @@
 class AppDelegate
-    attr_accessor :window
-    attr_accessor :table_view, :path_label
-    attr_accessor :path, :files
+    attr_accessor :window, :split_panel, :show_hidden_menu_item
+    attr_accessor :left_path, :left_path_label, :left_dir_files, :left_dir_view
+    attr_accessor :right_path, :right_path_label, :right_dir_files, :right_dir_view
 
     def initialize
 	    NSLog 'init AppDelagate'
 	    @file_controller = FileController.new
-        @path = '/'
-	    @files = @file_controller.get_files @path
+        @left_path = '/'
+	    @left_dir_files = @file_controller.get_files @left_path
+	    @right_path = '/'
+	    @right_dir_files = @file_controller.get_files @right_path
+
+	    @on_the_left_side = lambda {|path|
+		    @left_path = path
+		    show_hidden_flag = @show_hidden_menu_item.state == NSOnState
+		    @left_dir_files = @file_controller.get_files @left_path, show_hidden_flag
+		    @left_path_label.stringValue = @left_path
+		    self.left_dir_view.reloadData
+		    indexes = NSIndexSet.alloc.initWithIndex(0)
+		    self.left_dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
+	    }
+
+	    @on_the_right_side = lambda {|path|
+		    @right_path = path
+		    show_hidden_flag = @show_hidden_menu_item.state == NSOnState
+		    @right_dir_files = @file_controller.get_files @right_path, show_hidden_flag
+		    @right_path_label.stringValue = @right_path
+		    self.right_dir_view.reloadData
+		    indexes = NSIndexSet.alloc.initWithIndex(0)
+		    self.right_dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
+	    }
     end
 
     def applicationDidFinishLaunching(a_notification)
         NSLog "Howdy!"
-	    @path_label.stringValue = @path
+	    @left_path_label.stringValue = @left_path
 
-	    @table_view.instance_eval {
-		    def on_key_down=(on_key_down)
-			    @on_key_down = on_key_down
-		    end
-
-		    def on_key_down
-			    @on_key_down
-		    end
-
-		    alias old_key_down keyDown
-
-		    def keyDown(event)
-			    #NSLog event.characters.inspect
-			    characters = event.characters
-			    character = characters.characterAtIndex(0)
-			    #NSLog "#{character}"
-			    if (event.modifierFlags & NSCommandKeyMask) == NSCommandKeyMask
-				    NSLog "Cmd + #{character}"
-			    elsif (event.modifierFlags & NSShiftKeyMask) == NSShiftKeyMask
-					NSLog "Shift + #{character}"
-			    elsif (event.modifierFlags & NSControlKeyMask) == NSControlKeyMask
-				    NSLog "Ctrl + #{character}"
-			    elsif (event.modifierFlags & NSAlternateKeyMask) == NSAlternateKeyMask
-					NSLog "Alt + #{character}"
-			    else
-				end
-
-			    self.on_key_down.call(character, self.selectedRow)
-			    old_key_down(event)
-		    end
-
-		    def acceptsFirstResponder
-			    true
-		    end
-	    }
-
-	    @table_view.on_key_down = lambda {|key, row|
+	    @left_dir_view.on_key_down = lambda {|key, row|
 		    if key == 13
-		        open_path files[row].path
-			    true
+		        open_file left_dir_files[row], @on_the_left_side
 			elsif key == 127
-				open_path files[0].path
-			    true
+				open_file left_dir_files[0], @on_the_left_side
 			end
-		    false
 	    }
+
+        @right_dir_view.on_key_down = lambda {|key, row|
+		    if key == 13
+		        open_file right_dir_files[row], @on_the_right_side
+			elsif key == 127
+				open_file right_dir_files[0], @on_the_right_side
+			end
+	    }
+
     end
 
 	def awakeFromNib
-		self.table_view.doubleAction = 'double_click:'
+		self.left_dir_view.doubleAction = 'left_dir_view_double_click:'
+		self.right_dir_view.doubleAction = 'right_dir_view_double_click:'
 	end
 
-	def double_click(sender)
-		#Animations.yellow_fade(sender, table_view)
-		NSLog "open dir #{files[sender.clickedRow].path}"
-		open_path files[sender.clickedRow].path
+	def left_dir_view_double_click(sender)
+		open_file left_dir_files[sender.clickedRow], @on_the_left_side
 	end
 
-	def open_path(path)
-		@path = path
-		@files = @file_controller.get_files @path
-		@path_label.stringValue = @path
-		self.table_view.reloadData
-		indexes = NSIndexSet.alloc.initWithIndex(0)
-		self.table_view.selectRowIndexes(indexes, byExtendingSelection:false)
+    def right_dir_view_double_click(sender)
+	    open_file right_dir_files[sender.clickedRow], @on_the_right_side
+		#open_right_path right_dir_files[sender.clickedRow].path
+	end
+
+    def open_file(file, side)
+	    #Animations.yellow_fade(sender, table_view)
+	    if (file.type == 'link' || file.type == 'directory')
+		    NSLog "open dir #{file.path}"
+		    side.call file.path
+	    else
+		    NSWorkspace.sharedWorkspace.openFile(file.path)
+	    end
+    end
+
+	def show_hidden(sender)
+		NSLog 'okay'
+		state = @show_hidden_menu_item.state == NSOffState ? NSOnState : NSOffState
+		@show_hidden_menu_item.setState state
+		reload
+	end
+
+	def reload
+		@on_the_left_side.call @left_path
+		@on_the_right_side.call @right_path
 	end
 end
 
