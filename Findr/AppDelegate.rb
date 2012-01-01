@@ -12,22 +12,28 @@ class AppDelegate
 	    @right_dir_files = @file_controller.get_files @right_path
 
 	    @on_the_left_side = lambda {|path|
+		    old_path = @left_path
 		    @left_path = path
 		    show_hidden_flag = @show_hidden_menu_item.state == NSOnState
 		    @left_dir_files = @file_controller.get_files @left_path, show_hidden_flag
 		    @left_path_label.stringValue = @left_path
 		    self.left_dir_view.reloadData
-		    indexes = NSIndexSet.alloc.initWithIndex(0)
+		    index = 0
+		    index = @left_dir_files.index {|x| x.path == old_path} if old_path[path]
+		    indexes = NSIndexSet.alloc.initWithIndex(index)
 		    self.left_dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
 	    }
 
 	    @on_the_right_side = lambda {|path|
+		    old_path = @right_path
 		    @right_path = path
 		    show_hidden_flag = @show_hidden_menu_item.state == NSOnState
 		    @right_dir_files = @file_controller.get_files @right_path, show_hidden_flag
 		    @right_path_label.stringValue = @right_path
 		    self.right_dir_view.reloadData
-		    indexes = NSIndexSet.alloc.initWithIndex(0)
+		    index = 0
+		    index = @right_dir_files.index {|x| x.path == old_path} if old_path[path]
+		    indexes = NSIndexSet.alloc.initWithIndex(index)
 		    self.right_dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
 	    }
     end
