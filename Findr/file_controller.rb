@@ -27,6 +27,7 @@ class FileController
 			file_info.date = File.atime(abs_file_name).strftime("%d/%m/%Y %H:%M:%S")
 			file_info.attr = File.world_readable? abs_file_name
 			file_info.path = abs_file_name
+			file_info.icon = NSWorkspace.sharedWorkspace.iconForFile(abs_file_name)
 
 			file_info.ext = file_info.type
 

@@ -15,6 +15,8 @@ class DirView < NSTableView
 			NSLog "Ctrl + #{character}"
 		elsif (event.modifierFlags & NSAlternateKeyMask) == NSAlternateKeyMask
 			NSLog "Alt + #{character}"
+		elsif (event.modifierFlags & NSFunctionKeyMask) == NSFunctionKeyMask
+			#NSLog "F + #{character}"
 		else
 		end
 
