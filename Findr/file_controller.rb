@@ -21,22 +21,20 @@ class FileController
 				else file_info.display_name = file_name
 			end
 			file_info.name = file_name
-			file_info.size = readable_file_size(File.size(abs_file_name), 2)
 			file_info.type = File.ftype abs_file_name
 			file_info.ext = File.extname abs_file_name
 			file_info.date = File.atime(abs_file_name).strftime("%d/%m/%Y %H:%M:%S")
-			file_info.attr = File.world_readable? abs_file_name
 			file_info.path = abs_file_name
-			file_info.icon = NSWorkspace.sharedWorkspace.iconForFile(abs_file_name)
+			file_info.size = readable_file_size(File.size(abs_file_name), 2)
 
-			file_info.ext = file_info.type
+			attr = ''
+			attr = 'd' if file_ftype == 'directory'
+			file_info.attr = attr << get_access_control_list(abs_file_name)
 
-			if file_ftype == 'link' || file_ftype == 'directory'
-				#directories << file_info
-				files << file_info
-			else
-				files << file_info
-			end
+			#file_info.icon = NSWorkspace.sharedWorkspace.iconForFile(abs_file_name)
+			file_info.ext = file_ftype
+
+			files << file_info
 		end
 
 		# sort dirs and then files
@@ -45,6 +43,27 @@ class FileController
 		#files.sort! &sort_predicate
 		#directories + files
 		files
+	end
+
+	def get_access_control_list(path)
+		file_stat = File.stat(path)
+		mode = file_stat.mode & 0777
+		mode = mode.to_s(8)
+		access_control_list = ''
+		mode.each_char {|c|
+			case
+				when c == '0' then access_control_list << '---'
+				when c == '1' then access_control_list << '--x'
+				when c == '2' then access_control_list << '-w-'
+				when c == '3' then access_control_list << '-wx'
+				when c == '4' then access_control_list << 'r--'
+				when c == '5' then access_control_list << 'r-x'
+				when c == '6' then access_control_list << 'rw-'
+				when c == '7' then access_control_list << 'rwx'
+			end
+		}
+		access_control_list << 't' if file_stat.sticky?
+		access_control_list
 	end
 
 	# Return the file size with a readable style.

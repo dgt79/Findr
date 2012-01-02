@@ -27,7 +27,6 @@ class AppDelegate
     end
 
 	def show_hidden(sender)
-		NSLog 'okay'
 		state = @show_hidden_menu_item.state == NSOffState ? NSOnState : NSOffState
 		@show_hidden_menu_item.setState state
 		reload
