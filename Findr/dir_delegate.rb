@@ -1,6 +1,4 @@
 class DirDelegate
-	$VIEWER = 'TextEdit.app'; $EDITOR = 'TextMate.app'
-	$KEY_ENTER = 13; $KEY_BACKSPACE = 127; $KEY_F3 = 63238;	$KEY_F4 = 63239
 	attr_accessor :parent
 	attr_accessor :path, :path_label, :dir_files, :dir_view
 
@@ -12,7 +10,7 @@ class DirDelegate
 
 	def applicationDidFinishLaunching(a_notification)
 		@path_label.stringValue = @path
-		@dir_view.on_key_down = lambda {|key, row|
+		@dir_view.on_key_down = lambda {|key, modifier_flags, row|
 			if key == $KEY_ENTER
 				open_file dir_files[row]
 			elsif key == $KEY_BACKSPACE
@@ -21,6 +19,8 @@ class DirDelegate
 				NSWorkspace.sharedWorkspace.openFile dir_files[row].path, withApplication: $VIEWER
 			elsif key == $KEY_F4
 				NSWorkspace.sharedWorkspace.openFile dir_files[row].path, withApplication: $EDITOR
+			elsif (key == $KEY_LEFT_ARROW || key == $KEY_RIGHT_ARROW) && ((modifier_flags & NSCommandKeyMask) == NSCommandKeyMask)
+				@parent.open_path_twin_view self.__id__, dir_files[row]
 			end
 		}
 	end
@@ -62,12 +62,18 @@ class DirDelegate
 		end
 	end
 
-	def reload
+	def load_path path
+		@path = path
 		show_hidden_flag = @parent.show_hidden_menu_item.state == NSOnState
 		@dir_files = @file_controller.get_files @path, show_hidden_flag
+		@path_label.stringValue = @path
 		self.dir_view.reloadData
 		index = 0
 		indexes = NSIndexSet.alloc.initWithIndex(index)
 		self.dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
+	end
+
+	def reload
+		load_path @path
 	end
 end

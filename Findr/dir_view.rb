@@ -20,7 +20,7 @@ class DirView < NSTableView
 		else
 		end
 
-		self.on_key_down.call(character, self.selectedRow)
+		self.on_key_down.call(character, event.modifierFlags, self.selectedRow)
 		super
 	end
 end
