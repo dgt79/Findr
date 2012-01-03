@@ -48,4 +48,5 @@ class AppDelegate
 	    @left_dir_delegate.load_path file.path if @left_dir_delegate.__id__ != source_id
 	    @right_dir_delegate.load_path file.path if @right_dir_delegate.__id__ != source_id
     end
+
 end

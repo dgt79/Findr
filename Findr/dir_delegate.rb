@@ -1,10 +1,10 @@
 class DirDelegate
-	attr_accessor :parent
+	attr_accessor :parent, :new_folder_delegate
 	attr_accessor :path, :path_label, :dir_files, :dir_view
 
 	def initialize
 		@file_controller = FileController.new
-		@path = '/'
+		@path = ENV['HOME']
 		@dir_files = @file_controller.get_files @path
 	end
 
@@ -21,6 +21,8 @@ class DirDelegate
 				NSWorkspace.sharedWorkspace.openFile dir_files[row].path, withApplication: $EDITOR
 			elsif (key == $KEY_LEFT_ARROW || key == $KEY_RIGHT_ARROW) && ((modifier_flags & NSCommandKeyMask) == NSCommandKeyMask)
 				@parent.open_path_twin_view self.__id__, dir_files[row]
+			elsif key == $KEY_F7
+				self.new_folder_delegate.show_new_folder_window @path
 			end
 		}
 	end
@@ -62,8 +64,12 @@ class DirDelegate
 		end
 	end
 
-	def load_path path
-		@path = path
+	def load_path(path)
+		if File.directory? path
+			@path = path
+		elsif
+			@path = path[0, path.rindex(File.basename path)]
+		end
 		show_hidden_flag = @parent.show_hidden_menu_item.state == NSOnState
 		@dir_files = @file_controller.get_files @path, show_hidden_flag
 		@path_label.stringValue = @path

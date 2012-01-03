@@ -23,7 +23,7 @@ class FileController
 			file_info.name = file_name
 			file_info.type = File.ftype abs_file_name
 			file_info.ext = File.extname abs_file_name
-			file_info.date = File.atime(abs_file_name).strftime("%d/%m/%Y %H:%M:%S")
+			file_info.date = File.atime(abs_file_name).strftime("%d/%m/%y %H:%M")
 			file_info.path = abs_file_name
 			file_info.size = readable_file_size(File.size(abs_file_name), 2)
 
