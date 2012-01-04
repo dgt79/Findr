@@ -16,10 +16,10 @@ class AppDelegate
 
     def awakeFromNib
 	    @left_dir_delegate.dir_view.doubleAction = 'left_view_double_click:'
-	    #@left_dir_delegate.id = 'LEFT'
-
 	    @right_dir_delegate.dir_view.doubleAction = 'right_view_double_click:'
-	    #@right_dir_delegate.id = 'RIGHT'
+
+	    @observers = []
+	    @observers << @left_dir_delegate << @right_dir_delegate
 
 	    @window.zoom self
     end
@@ -49,4 +49,7 @@ class AppDelegate
 	    @right_dir_delegate.load_path file.path if @right_dir_delegate.__id__ != source_id
     end
 
+	def update(path, operation)
+		@observers.each {|observer| observer.notify path, operation}
+	end
 end

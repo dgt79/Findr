@@ -1,11 +1,14 @@
 class NewFolderDelegate
 	attr_accessor :dir_text_field, :parent, :new_folder_window
 
+	def initialize
+		@file_controller = FileController.new
+	end
+
 	def submit_new_dir_window(sender)
 		dir_name = '' << @path << '/' << self.dir_text_field.stringValue
-		NSLog "mkdir #{dir_name}"
-		Dir.mkdir dir_name
-		self.parent.reload
+		@file_controller.mkdir dir_name
+		self.parent.update dir_name, Const::NEW
 		NSApp.endSheet(new_folder_window)
 		new_folder_window.orderOut(sender)
 	end

@@ -1,3 +1,5 @@
+require "fileutils"
+
 class FileController
 	GIGA_SIZE = 1073741824.0
 	MEGA_SIZE = 1048576.0
@@ -43,6 +45,22 @@ class FileController
 		#files.sort! &sort_predicate
 		#directories + files
 		files
+	end
+
+	def mkdir(dir_name)
+		NSLog "mkdir dir #{dir_name}"
+		Dir.mkdir dir_name
+	end
+
+	def delete(file)
+		NSLog "rmdir #{file.path}"
+		FileUtils.rm_rf file.path, verbose: true, secure: true
+		#if (File.directory? file.path)
+		#	Dir.rmdir file.path
+		#else
+		#	NSLog "delete #{file.path}"
+		#	File.delete file.path
+		#end
 	end
 
 	def get_access_control_list(path)

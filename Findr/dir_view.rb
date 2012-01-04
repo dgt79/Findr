@@ -23,4 +23,18 @@ class DirView < NSTableView
 		self.on_key_down.call(character, event.modifierFlags, self.selectedRow)
 		super
 	end
+
+	def becomeFirstResponder
+		@focus = true
+		super
+	end
+
+	def resignFirstResponder
+		@focus = false
+		super
+	end
+
+	def has_focus
+		@focus
+	end
 end

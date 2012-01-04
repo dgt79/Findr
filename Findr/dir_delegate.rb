@@ -23,6 +23,8 @@ class DirDelegate
 				@parent.open_path_twin_view self.__id__, dir_files[row]
 			elsif key == $KEY_F7
 				self.new_folder_delegate.show_new_folder_window @path
+			elsif key == $KEY_F8
+				delete_file dir_files[row]
 			end
 		}
 	end
@@ -64,7 +66,7 @@ class DirDelegate
 		end
 	end
 
-	def load_path(path)
+	def load_path(path, index = 0)
 		if File.directory? path
 			@path = path
 		elsif
@@ -74,12 +76,38 @@ class DirDelegate
 		@dir_files = @file_controller.get_files @path, show_hidden_flag
 		@path_label.stringValue = @path
 		self.dir_view.reloadData
-		index = 0
 		indexes = NSIndexSet.alloc.initWithIndex(index)
 		self.dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
 	end
 
 	def reload
 		load_path @path
+	end
+
+	def delete_file(file)
+		@file_controller.delete file
+		self.parent.update file.path, Const::DELETE
+	end
+
+	def notify(path, operation)
+		if operation == Const::DELETE
+			if @dir_view.has_focus
+				index = @dir_files.index {|x| x.path == path}
+				load_path @path, index - 1
+			else
+				parent = path[0, path.rindex('/')]
+				load_path(parent) if @path[parent]
+			end
+		elsif operation == Const::NEW
+			if @dir_view.has_focus
+				reload
+				index = @dir_files.index {|x| x.path == path}
+				indexes = NSIndexSet.alloc.initWithIndex(index)
+				self.dir_view.selectRowIndexes(indexes, byExtendingSelection:false)
+			else
+				parent = path[0, path.rindex('/')]
+				load_path(parent) if @path == parent
+			end
+		end
 	end
 end
