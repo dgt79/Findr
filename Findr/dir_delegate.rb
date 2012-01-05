@@ -1,3 +1,5 @@
+# todo: time to break it down - mixin
+
 class DirDelegate
 	attr_accessor :parent, :new_folder_delegate
 	attr_accessor :path, :path_label, :dir_files, :dir_view
@@ -25,6 +27,8 @@ class DirDelegate
 				self.new_folder_delegate.show_new_folder_window @path
 			elsif key == $KEY_F8
 				dir_view.selectedRowIndexes.each {|i| delete_file @dir_files[i]}
+			elsif key == $KEY_F5
+				dir_view.selectedRowIndexes.each {|i| copy_file @dir_files[i]}
 			end
 		}
 	end
@@ -91,6 +95,13 @@ class DirDelegate
 		end
 	end
 
+	def copy_file(file)
+		@parent.queue.async do
+			@file_controller.copy file
+			self.parent.update file.path, Const::COPY
+		end
+	end
+
 	def notify(path, operation)
 		if operation == Const::DELETE
 			if @dir_view.has_focus
@@ -110,6 +121,8 @@ class DirDelegate
 				parent = path[0, path.rindex('/')]
 				load_path(parent) if @path == parent
 			end
+		elsif operation == Const::COPY
+		#	todo
 		end
 	end
 end
