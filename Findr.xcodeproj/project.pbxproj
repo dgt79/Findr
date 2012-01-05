@@ -13,6 +13,7 @@
 		375EC36014AA450300385FAF /* dir_view.rb in Resources */ = {isa = PBXBuildFile; fileRef = 375EC35F14AA450300385FAF /* dir_view.rb */; };
 		37C9864514B13B7F00455C0A /* global_var.rb in Resources */ = {isa = PBXBuildFile; fileRef = 37C9864414B13B7F00455C0A /* global_var.rb */; };
 		37C9864814B2783000455C0A /* new_folder_delegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = 37C9864714B2783000455C0A /* new_folder_delegate.rb */; };
+		37C9864A14B653F100455C0A /* ns_index_set.rb in Resources */ = {isa = PBXBuildFile; fileRef = 37C9864914B653F100455C0A /* ns_index_set.rb */; };
 		37DD6D0414B0E666008452DB /* dir_delegate.rb in Resources */ = {isa = PBXBuildFile; fileRef = 37DD6D0314B0E666008452DB /* dir_delegate.rb */; };
 		37E3A37F14A3E4B5003349BF /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E3A37E14A3E4B5003349BF /* Cocoa.framework */; };
 		37E3A38114A3E4B5003349BF /* MacRuby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E3A38014A3E4B5003349BF /* MacRuby.framework */; };
@@ -30,6 +31,7 @@
 		375EC35F14AA450300385FAF /* dir_view.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = dir_view.rb; sourceTree = "<group>"; };
 		37C9864414B13B7F00455C0A /* global_var.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = global_var.rb; sourceTree = "<group>"; };
 		37C9864714B2783000455C0A /* new_folder_delegate.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = new_folder_delegate.rb; sourceTree = "<group>"; };
+		37C9864914B653F100455C0A /* ns_index_set.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = ns_index_set.rb; sourceTree = "<group>"; };
 		37DD6D0314B0E666008452DB /* dir_delegate.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = dir_delegate.rb; sourceTree = "<group>"; };
 		37E3A37A14A3E4B5003349BF /* Findr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Findr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37E3A37E14A3E4B5003349BF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -85,6 +87,7 @@
 		37E3A38314A3E4B5003349BF /* Findr */ = {
 			isa = PBXGroup;
 			children = (
+				37C9864914B653F100455C0A /* ns_index_set.rb */,
 				37C9864714B2783000455C0A /* new_folder_delegate.rb */,
 				37C9864414B13B7F00455C0A /* global_var.rb */,
 				37DD6D0314B0E666008452DB /* dir_delegate.rb */,
@@ -202,6 +205,7 @@
 				37DD6D0414B0E666008452DB /* dir_delegate.rb in Resources */,
 				37C9864514B13B7F00455C0A /* global_var.rb in Resources */,
 				37C9864814B2783000455C0A /* new_folder_delegate.rb in Resources */,
+				37C9864A14B653F100455C0A /* ns_index_set.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

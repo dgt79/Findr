@@ -53,14 +53,8 @@ class FileController
 	end
 
 	def delete(file)
-		NSLog "rmdir #{file.path}"
+		NSLog "rm #{file.path}"
 		FileUtils.rm_rf file.path, verbose: true, secure: true
-		#if (File.directory? file.path)
-		#	Dir.rmdir file.path
-		#else
-		#	NSLog "delete #{file.path}"
-		#	File.delete file.path
-		#end
 	end
 
 	def get_access_control_list(path)

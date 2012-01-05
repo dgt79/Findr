@@ -5,7 +5,7 @@ class DirDelegate
 	def initialize
 		@file_controller = FileController.new
 		@path = ENV['HOME']
-		@dir_files = @file_controller.get_files @path
+		@dir_files = @file_controller.get_files @path, false
 	end
 
 	def applicationDidFinishLaunching(a_notification)
@@ -24,7 +24,7 @@ class DirDelegate
 			elsif key == $KEY_F7
 				self.new_folder_delegate.show_new_folder_window @path
 			elsif key == $KEY_F8
-				delete_file dir_files[row]
+				dir_view.selectedRowIndexes.each {|i| delete_file @dir_files[i]}
 			end
 		}
 	end
@@ -85,8 +85,10 @@ class DirDelegate
 	end
 
 	def delete_file(file)
-		@file_controller.delete file
-		self.parent.update file.path, Const::DELETE
+		@parent.queue.async do
+			@file_controller.delete file
+			self.parent.update file.path, Const::DELETE
+		end
 	end
 
 	def notify(path, operation)

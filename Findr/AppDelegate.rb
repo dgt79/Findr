@@ -1,11 +1,13 @@
 require File.dirname(__FILE__) + '/global_var.rb'
-
+require File.dirname(__FILE__) + '/ns_index_set'
 class AppDelegate
     attr_accessor :window, :split_panel, :show_hidden_menu_item
     attr_accessor :left_dir_delegate, :right_dir_delegate
+    attr_reader :queue
 
     def initialize
 	    NSLog 'init AppDelagate'
+	    @queue = Dispatch::Queue.new('findr.queue')
     end
 
     def applicationDidFinishLaunching(a_notification)
