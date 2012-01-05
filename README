@@ -5,8 +5,8 @@ feature list
 	- open files with default editor                            done
 	- open file in viewer                                       done
 	- open file in editor                                       done
-    - delete                                                    basic
-    - mkdir                                                     basic
+	- delete                                                    basic
+    	- mkdir                                                     basic
 	- copy
 	- move
 	- rename (inline)
