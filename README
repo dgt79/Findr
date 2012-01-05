@@ -1,3 +1,27 @@
 another TotalCommander clone for OS X written in macruby
 
-
+feature list
+	- basic navigation                                          done
+	- open files with default editor                            done
+	- open file in viewer                                       done
+	- open file in editor                                       done
+    - delete                                                    basic
+    - mkdir                                                     basic
+	- copy
+	- move
+	- rename (inline)
+	- search
+	- quick view
+	- filter
+	- cancel job
+	- view queue job status/progress
+	- os popup menu integration
+	- favourites paths
+	- path history
+	- open in twin                                              done
+	- switch views
+	- save settings
+	- externalize keyboard shortcuts in properties file
+	- command line (with auto-completion)
+	- multi-rename
+	- compare files
