@@ -57,9 +57,11 @@ class FileController
 		FileUtils.rm_rf file.path, verbose: true, secure: true
 	end
 
-	def copy(file)
-		NSLog "cp #{file.path}"
-		#FileUtils.cp_r file.path,
+	def copy(files, destination)
+		files.each do |file|
+			NSLog "cp #{file.path} #{destination}"
+			FileUtils.cp_r file.path, destination, verbose: true
+		end
 	end
 
 	def get_access_control_list(path)

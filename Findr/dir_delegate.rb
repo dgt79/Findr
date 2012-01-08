@@ -1,8 +1,9 @@
 # todo: time to break it down - mixin
 
 class DirDelegate
-	attr_accessor :parent, :new_folder_delegate
+	attr_accessor :parent, :new_folder_delegate, :copy_file_delegate
 	attr_accessor :path, :path_label, :dir_files, :dir_view
+	attr_accessor :twin
 
 	def initialize
 		@file_controller = FileController.new
@@ -22,13 +23,13 @@ class DirDelegate
 			elsif key == $KEY_F4
 				NSWorkspace.sharedWorkspace.openFile dir_files[row].path, withApplication: $EDITOR
 			elsif (key == $KEY_LEFT_ARROW || key == $KEY_RIGHT_ARROW) && ((modifier_flags & NSCommandKeyMask) == NSCommandKeyMask)
-				@parent.open_path_twin_view self.__id__, dir_files[row]
+				@twin.load_path dir_files[row].path
 			elsif key == $KEY_F7
-				self.new_folder_delegate.show_new_folder_window @path
+				@new_folder_delegate.show_new_folder_window @path
 			elsif key == $KEY_F8
 				dir_view.selectedRowIndexes.each {|i| delete_file @dir_files[i]}
 			elsif key == $KEY_F5
-				dir_view.selectedRowIndexes.each {|i| copy_file @dir_files[i]}
+				copy_files
 			end
 		}
 	end
@@ -95,11 +96,10 @@ class DirDelegate
 		end
 	end
 
-	def copy_file(file)
-		@parent.queue.async do
-			@file_controller.copy file
-			self.parent.update file.path, Const::COPY
-		end
+	def copy_files
+		files = []
+		dir_view.selectedRowIndexes.each {|i| files << @dir_files[i]}
+		@copy_file_delegate.show_copy_folder_window files, @twin.path
 	end
 
 	def notify(path, operation)
@@ -122,7 +122,7 @@ class DirDelegate
 				load_path(parent) if @path == parent
 			end
 		elsif operation == Const::COPY
-		#	todo
+			reload if @path == path
 		end
 	end
 end

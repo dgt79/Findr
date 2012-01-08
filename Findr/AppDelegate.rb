@@ -23,6 +23,9 @@ class AppDelegate
 	    @observers = []
 	    @observers << @left_dir_delegate << @right_dir_delegate
 
+			@left_dir_delegate.twin = @right_dir_delegate
+			@right_dir_delegate.twin = @left_dir_delegate
+
 	    @window.zoom self
     end
 
@@ -44,12 +47,6 @@ class AppDelegate
 		@left_dir_delegate.reload
 		@right_dir_delegate.reload
 	end
-
-    def open_path_twin_view source_id, file
-	    puts 'open in twin'
-	    @left_dir_delegate.load_path file.path if @left_dir_delegate.__id__ != source_id
-	    @right_dir_delegate.load_path file.path if @right_dir_delegate.__id__ != source_id
-    end
 
 	def update(path, operation)
 		@observers.each {|observer| observer.notify path, operation}

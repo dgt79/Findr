@@ -6,7 +6,7 @@ feature list
 	- open file in viewer                                       done
 	- open file in editor                                       done
 	- delete                                                    basic
-    	- mkdir                                                     basic
+    - mkdir                                                     basic
 	- copy
 	- move
 	- rename (inline)
