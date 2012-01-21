@@ -27,7 +27,7 @@ class DirDelegate
 			elsif key == $KEY_F7
 				@new_folder_delegate.show_new_folder_window @path
 			elsif key == $KEY_F8
-				dir_view.selectedRowIndexes.each {|i| delete_file @dir_files[i]}
+				delete_files
 			elsif key == $KEY_F5
 				copy_files
 			end
@@ -90,16 +90,25 @@ class DirDelegate
 		load_path @path
 	end
 
-	def delete_file(file)
-		@parent.queue.async do
-			@file_controller.delete file
-			self.parent.update file.path, Const::DELETE
+	def delete_files
+		files = []
+		dir_view.selectedRowIndexes.each {|i| files << @dir_files[i].path unless @dir_files[i].name == '..'}
+
+		@parent.queue.sync do
+			@parent.progress_indicator.startAnimation self
+
+			@file_controller.delete(files) do |file|
+				@parent.status_label.stringValue = "Deleting #{file}"
+				self.parent.update file, Const::DELETE
+			end
+
+			@parent.progress_indicator.stopAnimation self
 		end
 	end
 
 	def copy_files
 		files = []
-		dir_view.selectedRowIndexes.each {|i| files << @dir_files[i].path}
+		dir_view.selectedRowIndexes.each {|i| files << @dir_files[i].path unless @dir_files[i].name == '..'}
 		@copy_file_delegate.show_copy_folder_window files, @twin.path
 	end
 

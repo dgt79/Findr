@@ -53,10 +53,13 @@ class FileController
 		Dir.mkdir dir_name
 	end
 
-	def delete(file)
+	def delete(files)
 		trash = "#{ENV['HOME']}/.Trash"
-		NSLog "mv #{file.path} to #{trash}"
-		::FileUtils.mv path, trash, force: true, verbose: true
+		files.each do |file|
+			NSLog "mv #{file} to #{trash}"
+			::FileUtils.mv file, trash, force: true, verbose: true
+			yield file if block_given?
+		end
 	end
 
 	def copy(files, destination, &callback)
