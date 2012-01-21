@@ -9,7 +9,9 @@ class CopyFileDelegate
 	def submit_copy_file_window(sender)
 		@parent.queue.async do
 			destination = @copy_to_text_field.stringValue
-			@file_controller.copy @files_to_copy, destination
+			@file_controller.copy(@files_to_copy, destination) do |src, progress|
+				@parent.status_label.stringValue = "#{src} #{progress}"
+			end
 			self.parent.update destination, Const::COPY
 		end
 		NSApp.endSheet(@copy_file_window)

@@ -16,8 +16,9 @@ class DirView < NSTableView
 		elsif (event.modifierFlags & NSAlternateKeyMask) == NSAlternateKeyMask
 			NSLog "Alt + #{character}"
 		elsif (event.modifierFlags & NSFunctionKeyMask) == NSFunctionKeyMask
-			#NSLog "F + #{character}"
+			NSLog "F + #{character}"
 		else
+			NSLog "#{character}"
 		end
 
 		self.on_key_down.call(character, event.modifierFlags, self.selectedRow)

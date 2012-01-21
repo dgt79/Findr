@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/global_var.rb'
 require File.dirname(__FILE__) + '/ns_index_set'
 class AppDelegate
     attr_accessor :window, :split_panel, :show_hidden_menu_item
+		attr_accessor :status_label, :status_label_cell
     attr_accessor :left_dir_delegate, :right_dir_delegate
     attr_reader :queue
 
@@ -27,6 +28,8 @@ class AppDelegate
 			@right_dir_delegate.twin = @left_dir_delegate
 
 	    @window.zoom self
+
+			#@status_label_cell.setBackgroundStyle = NSBackgroundStyleRaised
     end
 
     def left_view_double_click(sender)

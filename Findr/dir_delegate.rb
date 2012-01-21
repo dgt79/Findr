@@ -32,6 +32,7 @@ class DirDelegate
 				copy_files
 			end
 		}
+
 	end
 
 	#cocoa override
@@ -98,7 +99,7 @@ class DirDelegate
 
 	def copy_files
 		files = []
-		dir_view.selectedRowIndexes.each {|i| files << @dir_files[i]}
+		dir_view.selectedRowIndexes.each {|i| files << @dir_files[i].path}
 		@copy_file_delegate.show_copy_folder_window files, @twin.path
 	end
 

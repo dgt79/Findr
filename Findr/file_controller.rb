@@ -1,4 +1,5 @@
 require "fileutils"
+require "pathname"
 
 class FileController
 	GIGA_SIZE = 1073741824.0
@@ -53,16 +54,80 @@ class FileController
 	end
 
 	def delete(file)
-		NSLog "rm #{file.path}"
-		FileUtils.rm_rf file.path, verbose: true, secure: true
+		trash = "#{ENV['HOME']}/.Trash"
+		NSLog "mv #{file.path} to #{trash}"
+		::FileUtils.mv path, trash, force: true, verbose: true
 	end
 
-	def copy(files, destination)
-		files.each do |file|
-			NSLog "cp #{file.path} #{destination}"
-			FileUtils.cp_r file.path, destination, verbose: true
+	def copy(files, destination, &callback)
+		#FileUtils.cp_r file.path, destination, verbose: true
+		if File.directory? destination
+			files.each do |file|
+				if File.directory? file
+					low_level_copy(file, destination, &callback)
+				else
+					dest_file = '' << destination << '/' << File.basename(file)
+					low_level_copy file, dest_file, &callback
+				end
+			end
+		else
+			if files.size == 1
+				destination_path = File.dirname destination
+				if !File.directory? destination_path
+					NSLog "mkdir_p #{destination_path}"
+					::FileUtils.mkdir_p destination_path
+				end
+				low_level_copy(files[0], destination, &callback)
+			else
+				NSLog "mkdir_p #{destination}"
+				::FileUtils.mkdir_p destination
+				files.each {|file| low_level_copy(file, destination + '/' + file.name, &callback)}
+			end
 		end
 	end
+
+	def low_level_copy(src, dest, &block)
+		NSLog "copy #{src} to #{dest}"
+		if File.directory? src
+			copy_dir(src, dest, &block)
+		else
+			copy_file(dest, src, &block)
+		end
+	end
+
+	def copy_dir(src, dest, &block)
+		dir = '' << dest << '/' << File.basename(src)
+		NSLog "mkdir #{dir}"
+		Dir.mkdir dir
+		Pathname(src).each_child do |file|
+			if File.directory? file
+				low_level_copy file, dir, &block
+			else
+				dest_file = '' << dir << '/' << File.basename(file)
+				low_level_copy file, dest_file, &block
+			end
+		end
+	end
+
+	def copy_file(dest, src)
+		in_file = File.new(src, "r")
+		out_file = File.new(dest, "w")
+		in_size = File.size(src)
+		buffer_size = in_size < 1024 * 16 ? in_size : 1024 * 16
+		total = 0
+		buffer = in_file.sysread(buffer_size)
+		while total < in_size do
+			out_file.syswrite(buffer)
+			total += buffer_size
+			progress = (total * 100 / in_size).to_s + '%'
+			yield(src, progress) if block_given?
+			buffer_size = in_size - total if (in_size - total) < buffer_size
+			buffer = in_file.sysread(buffer_size)
+		end
+		in_file.close
+		out_file.close
+	end
+
 
 	def get_access_control_list(path)
 		file_stat = File.stat(path)
